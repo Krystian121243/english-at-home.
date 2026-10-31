@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6558d3">
+<title>English at Home – Sprawdzian</title>
+
+<style>
+:root {
+  --purple: #6558d3;
+  --light: #f2efff;
+  --green: #20a66a;
+  --red: #e05252;
+  --ink: #292943;
+  --white: #fff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f5ff;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+header {
+  background: linear-gradient(135deg,#6558d3,#9c70e8);
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+  border-radius: 0 0 30px 30px;
+}
+
+header h1 {
+  font-size: clamp(27px,6vw,40px);
+  margin: 0 0 8px;
+}
+
+header p { margin: 5px; }
+
+.container {
+  width: min(900px,94%);
+  margin: 22px auto;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px #34346b12;
+}
+
+h2 {
+  color: var(--purple);
+  margin-top: 0;
+}
+
+h3 { margin-bottom: 8px; }
+
+.intro {
+  text-align: center;
+  font-size: 17px;
+}
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
+  gap: 10px;
+}
+
+.word {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--light);
+  font-weight: bold;
+}
+
+.speak {
+  border: 0;
+  background: #e3ddff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.speak:active { transform: scale(.9); }
+
+.question {
+  border: 2px solid #eeeaff;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 15px 0;
+}
+
+.question-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.number {
+  background: var(--purple);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.english {
+  color: #6558d3;
+  font-weight: bold;
+}
+
+.answers {
+  display: grid;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.answer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 2px solid #eeeaff;
+  padding: 9px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.answer:has(input:checked) {
+  background: var(--light);
+  border-color: var(--purple);
+}
+
+.answer input {
+  accent-color: var(--purple);
+  width: 18px;
+  height: 18px;
+}
+
+.answer-text {
+  flex: 1;
+  font-weight: bold;
+}
+
+.match-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 12px;
+  background: #f8f7ff;
+  border-radius: 12px;
+}
+
+.match-word {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: bold;
+}
+
+select {
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  border: 2px solid #ded8fa;
+  background: white;
+  font-size: 15px;
+}
+
+button.main {
+  background: var(--purple);
+  color: white;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px 22px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 15px;
+}
+
+button.main:active { transform: scale(.98); }
+
+.result {
+  display: none;
+  padding: 17px;
+  border-radius: 14px;
+  margin-top: 15px;
+  background: #e9f8ef;
+  border: 2px solid #b6e8c8;
+}
+
+.result h3 { color: #16834d; }
+
+.wrong {
+  background: #fff0f0;
+  border: 2px solid #ffcaca;
+}
+
+.correct {
+  background: #e8f8ed;
+  border: 2px solid #a8dfba;
+}
+
+.feedback {
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.final {
+  display: none;
+  text-align: center;
+  background: #fff5d9;
+  border: 2px solid #f3d98a;
+}
+
+.score {
+  font-size: 38px;
+  color: var(--purple);
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+}
+
+@media(max-width:500px) {
+  .card { padding: 15px; }
+  .match-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏡 English at Home</h1>
+  <p>Sprawdzian z języka angielskiego</p>
+  <p>Pomieszczenia i przedmioty w domu</p>
+  <p>⭐ Maksymalna liczba punktów: 22</p>
+</header>
+
+<main class="container">
+
+<section class="card intro">
+  <h2>👋 Powodzenia!</h2>
+  <p>Przypomnij sobie słówka, a następnie rozwiąż dwa zadania.</p>
+  <p>Good luck! 🍀</p>
+</section>
+
+<section class="card">
+  <h2>📚 Słówka do nauki / Vocabulary</h2>
+  <p>Kliknij głośnik, aby usłyszeć wymowę.</p>
+  <div class="word-grid" id="vocabulary"></div>
+</section>
+
+<section class="card" id="part1">
+  <h2>✏️ Część 1 – Wybierz odpowiedź</h2>
+  <p>15 pytań. Zaznacz jedną prawidłową odpowiedź.</p>
+  <p><b>Choose the correct answer.</b></p>
+  <div id="questions"></div>
+
+  <button class="main" onclick="checkPart1()">
+    Sprawdź część 1 / Check part 1
+  </button>
+
+  <div class="result" id="result1"></div>
+</section>
+
+<section class="card" id="part2">
+  <h2>🔗 Część 2 – Dopasuj przedmioty</h2>
+  <p>Dopasuj każdy przedmiot do odpowiedniego pomieszczenia.</p>
+  <p><b>Match the objects to the rooms.</b></p>
+
+  <div id="matching"></div>
+
+  <button class="main" onclick="checkPart2()">
+    Sprawdź część 2 / Check part 2
+  </button>
+
+  <div class="result" id="result2"></div>
+</section>
+
+<section class="card final" id="finalResult">
+  <h2>🏆 Koniec sprawdzianu!</h2>
+  <p>Twój wynik / Your score:</p>
+  <div class="score" id="totalScore"></div>
+  <p id="message"></p>
+  <button class="main" onclick="restartTest()">
+    🔄 Rozwiąż ponownie / Try again
+  </button>
+</section>
+
+</main>
+
+<footer>
+  🏡 English at Home • Powodzenia! 🍀
+</footer>
+
+<script>
+
+const words = [
+  "Bathroom",
+  "Living room",
+  "Bedroom",
+  "Hall",
+  "Garage",
+  "Toilet",
+  "Dining room",
+  "Kitchen",
+  "Bed",
+  "Fridge",
+  "Clock",
+  "Cooker",
+  "Shower",
+  "Sofa"
+];
+
+function speak(text) {
+  if (!("speechSynthesis" in window)) {
+    alert("Twoja przeglądarka nie obsługuje syntezy mowy.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = 0.8;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function speaker(text) {
+  return `<button type="button" class="speak"
+    aria-label="Posłuchaj wymowy ${text}"
+    onclick="speak('${text}')">🔊</button>`;
+}
+
+// SŁÓWKA
+
+document.getElementById("vocabulary").innerHTML =
+  words.map(word => `
+    <div class="word">
+      <span>${word}</span>
+      ${speaker(word)}
+    </div>
+  `).join("");
+
+// PYTANIA TESTOWE
+
+const questions = [
+  {
+    pl: "Gdzie śpisz?",
+    en: "Where do you sleep?",
+    options: ["Bedroom","Bathroom","Garage"],
+    correct: "Bedroom"
+  },
+  {
+    pl: "W którym pomieszczeniu znajduje się lodówka?",
+    en: "Where is the fridge?",
+    options: ["Hall","Kitchen","Bedroom"],
+    correct: "Kitchen"
+  },
+  {
+    pl: "W którym pomieszczeniu bierzesz prysznic?",
+    en: "Where do you take a shower?",
+    options: ["Garage","Bathroom","Dining room"],
+    correct: "Bathroom"
+  },
+  {
+    pl: "Gdzie parkujesz samochód?",
+    en: "Where do you park a car?",
+    options: ["Garage","Bedroom","Kitchen"],
+    correct: "Garage"
+  },
+  {
+    pl: "W którym pomieszczeniu znajduje się sofa?",
+    en: "Where is the sofa?",
+    options: ["Bathroom","Living room","Hall"],
+    correct: "Living room"
+  },
+  {
+    pl: "Gdzie znajduje się kuchenka?",
+    en: "Where is the cooker?",
+    options: ["Kitchen","Garage","Bedroom"],
+    correct: "Kitchen"
+  },
+  {
+    pl: "W którym pomieszczeniu jesz obiad?",
+    en: "Where do you eat dinner?",
+    options: ["Dining room","Bathroom","Garage"],
+    correct: "Dining room"
+  },
+  {
+    pl: "Jak nazywa się przedpokój?",
+    en: "Which room is the hall?",
+    options: ["Bedroom","Hall","Kitchen"],
+    correct: "Hall"
+  },
+  {
+    pl: "Co znajduje się w sypialni?",
+    en: "What is in the bedroom?",
+    options: ["Bed","Fridge","Cooker"],
+    correct: "Bed"
+  },
+  {
+    pl: "Co może znajdować się w łazience?",
+    en: "What is in the bathroom?",
+    options: ["Sofa","Toilet","Garage"],
+    correct: "Toilet"
+  },
+  {
+    pl: "Co służy do przechowywania zimnego jedzenia?",
+    en: "What keeps food cold?",
+    options: ["Clock","Fridge","Bed"],
+    correct: "Fridge"
+  },
+  {
+    pl: "Co pokazuje godzinę?",
+    en: "What shows the time?",
+    options: ["Shower","Sofa","Clock"],
+    correct: "Clock"
+  },
+  {
+    pl: "Na czym możesz usiąść w salonie?",
+    en: "What can you sit on in the living room?",
+    options: ["Sofa","Cooker","Fridge"],
+    correct: "Sofa"
+  },
+  {
+    pl: "Czego używasz do gotowania?",
+    en: "What do you use for cooking?",
+    options: ["Bed","Cooker","Toilet"],
+    correct: "Cooker"
+  },
+  {
+    pl: "Czego używasz do mycia się pod strumieniem wody?",
+    en: "What do you use to take a shower?",
+    options: ["Clock","Shower","Sofa"],
+    correct: "Shower"
+  }
+];
+
+const questionContainer = document.getElementById("questions");
+
+questions.forEach((q,i) => {
+  const div = document.createElement("div");
+  div.className = "question";
+  div.id = "q" + i;
+
+  div.innerHTML = `
+    <div class="question-title">
+      <span class="number">${i+1}</span>
+      <span>${q.pl}</span>
+      ${speaker(q.en)}
+    </div>
+    <p class="english">${q.en}</p>
+    <div class="answers">
+      ${q.options.map((option,j) => `
+        <label class="answer" id="q${i}a${j}">
+          <input type="radio" name="q${i}" value="${option}">
+          <span class="answer-text">${String.fromCharCode(65+j)}. ${option}</span>
+          ${speaker(option)}
+        </label>
+      `).join("")}
+    </div>
+    <div class="feedback" id="feedback${i}"></div>
+  `;
+
+  questionContainer.appendChild(div);
+});
+
+// SPRAWDZANIE CZĘŚCI 1
+
+let score1 = null;
+let score2 = null;
+
+function checkPart1() {
+  if (score1 !== null) return;
+
+  score1 = 0;
+
+  questions.forEach((q,i) => {
+    const selected = document.querySelector(
+      `input[name="q${i}"]:checked`
+    );
+
+    const feedback = document.getElementById("feedback"+i);
+
+    if (selected && selected.value === q.correct) {
+      score1++;
+      feedback.textContent = "✅ Poprawnie! / Correct!";
+      feedback.style.color = "#16834d";
+    } else {
+      feedback.textContent =
+        "❌ Poprawna odpowiedź / Correct answer: " + q.correct;
+      feedback.style.color = "#d44848";
+    }
+
+    document.querySelectorAll(`input[name="q${i}"]`)
+      .forEach(input => {
+        input.disabled = true;
+      });
+  });
+
+  const result = document.getElementById("result1");
+  result.style.display = "block";
+  result.innerHTML = `
+    <h3>🎉 Twój wynik / Your result</h3>
+    <div class="score">${score1} / 15</div>
+    <p>${score1 >= 13 ? "Świetnie! Excellent!" :
+      score1 >= 9 ? "Dobra robota! Good job!" :
+      "Ćwicz dalej! Keep practising!"}</p>
+  `;
+
+  if (score2 !== null) showFinal();
+}
+
+// DOPASOWYWANIE
+
+const matches = [
+  {word:"Bed",correct:"Bedroom"},
+  {word:"Fridge",correct:"Kitchen"},
+  {word:"Clock",correct:"Living room"},
+  {word:"Cooker",correct:"Kitchen"},
+  {word:"Shower",correct:"Bathroom"},
+  {word:"Sofa",correct:"Living room"},
+  {word:"Toilet",correct:"Bathroom"}
+];
+
+const rooms = [
+  "Bathroom",
+  "Living room",
+  "Bedroom",
+  "Hall",
+  "Garage",
+  "Dining room",
+  "Kitchen"
+];
+
+const matching = document.getElementById("matching");
+
+matches.forEach((item,i) => {
+  const div = document.createElement("div");
+  div.className = "match-row";
+  div.id = "match" + i;
+
+  div.innerHTML = `
+    <div class="match-word">
+      <span>${i+1}. ${item.word}</span>
+      ${speaker(item.word)}
+    </div>
+    <div>
+      <select id="select${i}">
+        <option value="">-- Wybierz pomieszczenie --</option>
+        ${rooms.map(room =>
+          `<option value="${room}">${room}</option>`
+        ).join("")}
+      </select>
+    </div>
+    <div class="feedback" id="matchFeedback${i}"></div>
+  `;
+
+  matching.appendChild(div);
+});
+
+// SPRAWDZANIE CZĘŚCI 2
+
+function checkPart2() {
+  if (score2 !== null) return;
+
+  score2 = 0;
+
+  matches.forEach((item,i) => {
+    const select = document.getElementById("select"+i);
+    const feedback = document.getElementById("matchFeedback"+i);
+
+    select.disabled = true;
+
+    if (select.value === item.correct) {
+      score2++;
+      feedback.textContent = "✅ Poprawnie!";
+      feedback.style.color = "#16834d";
+    } else {
+      feedback.textContent =
+        "❌ Poprawna odpowiedź: " + item.correct;
+      feedback.style.color = "#d44848";
+    }
+  });
+
+  const result = document.getElementById("result2");
+  result.style.display = "block";
+
+  result.innerHTML = `
+    <h3>🎉 Twój wynik / Your result</h3>
+    <div class="score">${score2} / 7</div>
+    <p>${score2 >= 6 ? "Doskonale! Excellent!" :
+      score2 >= 4 ? "Dobra robota! Good job!" :
+      "Ćwicz dalej! Keep practising!"}</p>
+  `;
+
+  if (score1 !== null) showFinal();
+}
+
+// WYNIK KOŃCOWY
+
+function showFinal() {
+  const total = score1 + score2;
+
+  document.getElementById("totalScore").textContent =
+    total + " / 22";
+
+  let message = "";
+
+  if (total >= 21) {
+    message = "🏆 Rewelacyjnie! Świetna znajomość słówek!";
+  } else if (total >= 18) {
+    message = "🌟 Bardzo dobrze! Great job!";
+  } else if (total >= 14) {
+    message = "👏 Dobrze! Good work!";
+  } else if (total >= 10) {
+    message = "🙂 Nieźle! Poćwicz jeszcze trochę!";
+  } else {
+    message = "💪 Nie poddawaj się! Spróbuj ponownie!";
+  }
+
+  document.getElementById("message").textContent = message;
+
+  const final = document.getElementById("finalResult");
+  final.style.display = "block";
+
+  final.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+// PONOWNE ROZWIĄZANIE
+
+function restartTest() {
+  window.speechSynthesis?.cancel();
+  location.reload();
+}
+
+</script>
+</body>
+  </html>
+  
